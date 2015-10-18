@@ -1,25 +1,18 @@
-*.py[cod]
-
-# C extensions
-*.so
-
-node_modules
+# System
 .DS_Store
 
-npm-debug.log
+# Logs
+*.log
 
-app/*.js
-app/*/*.js
-app/*/*/*.js
-app/*/*/*/*.js
-app/*/*/*/*/*.js
+# IntelliJ project files
+.idea
 
-tests/*.js
-tests/spec/*.js
-tests/spec/*/*.js
-tests/spec/*/*/*.js
-tests/spec/*/*/*/*.js
+# Dependency directory
+node_modules
+bower_components
 
-!app/assets/*
-!app/assets/*/*
+# Sass
+.sass-cache
 
+# Build
+.compiled

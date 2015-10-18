@@ -1,0 +1,20 @@
+{
+  "name": "Encode",
+  "dependencies": {
+    "lodash": "~3.9.3",
+    "backbone": "~1.1.2",
+    "jquery": "~2.1.1",
+    "requirejs": "~2.1.14",
+    "handlebars": "~2.0.0",
+    "backbone.controller": "*",
+    "requirejs-text": "~2.0.12",
+    "bootstrap-sass-official": "~3.3.1",
+    "backbone-mediator": "~1.0.0",
+    "seedrandom": "~2.3.10",
+    "backbone.subviews": "~0.7.3",
+    "q": "1.1.2",
+    "backbone-validation": "~0.11.3",
+    "rivets": "~0.8.0",
+    "sightglass": "~0.2.4"
+  }
+}

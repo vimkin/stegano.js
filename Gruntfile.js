@@ -1,80 +1,135 @@
-module.exports = function(grunt) {
-	grunt.initConfig({
-		connect: {
-			server: {
-				options: {
-					port: 8080,
-					base: './app'
-				}
-			}
-		},
+module.exports = function (grunt) {
 
-		coffee: {
-			options: {
-				bare: true
-			},
-			glob_to_multiple: {
-				expand: true,
-				cwd: '.',
-				src: [
-					'app/*.coffee',
-					'app/**/*.coffee',
-					'tests/**/*.coffee',
-					'tests/*.coffee',
-					'generators/**/*.coffee'
-				],
-				dest: '.',
-				ext: '.js'
-			}
-		},
+  require('load-grunt-tasks')(grunt);
 
-		/*less: {
-			all: {
-				src: 'app/assets/less/*.less',
-				dest: 'app/assets/css/all.css'
-			}
-		},*/
+  grunt.initConfig({
+    clean: ['.compiled/'],
 
-		sass: {
-			options: {
-				noCache: true
-			},
-			glob_to_multiple: {
-				expand: true,
-				cwd: 'app/assets/scss',
-				src: ['*.scss', '*/**/*.scss'],
-				dest: 'app/assets/css',
-				ext: '.css'
-			}
-		},
+    connect: {
+      server: {
+        options: {
+          port: 8080,
+          base: './',
+          livereload: true
+        }
+      }
+    },
 
-		watch: {
-			files: [
-				'app/assets/scss/*.scss',
-				'app/*.coffee',
-				'app/**/*.coffee',
-				'tests/**/*.coffee',
-				'generators/**/*.coffee'
-			],
-			tasks: ['sass', 'coffee']
-		},
+    express: {
+      options: {
+        port: 3000
+      },
+      dev: {
+        options: {
+          script: 'server/server.js',
+          node_env: 'development'
+        }
+      }
+    },
 
-		testacular: {
-			unit: {
-				options: {
-					configFile: 'tests/testacular-config.js'
-				}
-			}
-		}
-	});
+    coffee: {
+      options: {
+        bare: true
+      },
+      dev: {
+        options: {
+          sourceMap: true
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'app/',
+            src: ['**/*.coffee'],
+            dest: '.compiled/',
+            ext: '.js'
+          }
+        ]
+      }
+    },
 
-	grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-connect');
-	grunt.loadNpmTasks('grunt-contrib-coffee');
-	grunt.loadNpmTasks('grunt-testacular');
+    coffeelint: {
+      app: ['app/**/*.coffee'],
+      options: {
+        max_line_length: {
+          value: 100
+        }
+      }
+    },
 
-	// Setip tasks, wanch should be last
-	grunt.registerTask('run', ['coffee', 'connect', 'testacular', 'watch']);
-	grunt.registerTask('default', ['run']);
+    sass: {
+      dev: {
+        files: {
+          'app/assets/css/main.css': 'app/assets/scss/main.scss'
+        },
+        options: {
+          style: 'expanded'
+        }
+      }
+    },
+
+    copy: {
+      main: {
+        files: [
+          {
+            expand: true,
+            cwd: 'app/',
+            src: [
+              '**/*.css',
+              '**/*.hbs',
+              '**/*.js',
+              '**/*.png',
+              '**/*.gif',
+              '**/*.jpg',
+              '**/*.ttf',
+              '**/*.woff',
+              '**/*.eot',
+              '**/*.svg',
+              '**/*.html',
+              'assets'
+            ],
+            dest: '.compiled/'
+          }
+        ]
+      }
+    },
+
+    watch: {
+      options: {
+        livereload: true,
+        add: true
+      },
+      coffee: {
+        files: ['app/**/*.coffee'],
+        tasks: ['coffeelint', 'coffee:dev']
+      },
+      scss: {
+        files: ['app/**/*.scss'],
+        tasks: ['sass', 'copy']
+      },
+      hbs: {
+        files: ['app/**/*.hbs'],
+        tasks: ['copy']
+      },
+      express: {
+        files: ['server/**/*.js'],
+        tasks: ['express:dev']
+      }
+    }
+  });
+
+  grunt.registerTask('run', 'run all tasks', function() {
+    var tasks = [
+      'clean',
+      'coffeelint',
+      'coffee:dev',
+      'sass:dev',
+      'copy',
+      'express:dev',
+      'watch'
+    ];
+    grunt.option('force', true);
+    grunt.task.run(tasks);
+  });
+
+  grunt.registerTask('default', ['run']);
 };
