@@ -1,0 +1,60 @@
+<form>
+    {{!-- Choose action --}}
+    <div class="form-group">
+        <label for="algorithmAction">Choose action:</label>
+        <select id="algorithmAction" class="form-control" rv-value="model:action">
+            <option disabled selected> -- select an option -- </option>
+            {{#each actions}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+    </div>
+    {{!-- Choose type --}}
+    <div class="form-group">
+        <label for="algorithmType">Choose algorithm:</label>
+        <select id="algorithmType" class="form-control" rv-value="model:algorithm">
+            <option disabled selected> -- select an option -- </option>
+            {{#each types}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+    </div>
+    {{!-- Enter text --}}
+    <div class="form-group" rv-hide="model:action | string | eq 'decode'">
+        <label for="algorithmText">Enter text:</label>
+        <textarea id="algorithmText" rows="5" class="form-control" placeholder="Please enter text to encode" rv-value="model:text"></textarea>
+    </div>
+    {{!-- Image input and algorithm form --}}
+    <div class="row">
+        <div class="col-md-4">
+            {{!-- Image input --}}
+            <div class="form-group">
+                <label for="algorithmImage">Choose image from your file system:</label>
+                <div data-subview="ImageInput"></div>
+            </div>
+
+        </div>
+        {{!-- Algorithm form --}}
+        <div class="col-md-8">
+            {{!-- LSB --}}
+            <div rv-show="model:algorithm | eq 'lsb'">
+                <div data-subview="LSBForm"></div>
+            </div>
+            {{!-- LSBFixed --}}
+            <div rv-show="model:algorithm | eq 'lsbfixed'">
+                <div data-subview="LSBFixedForm"></div>
+            </div>
+            {{!-- LSBSeed --}}
+            <div rv-show="model:algorithm | eq 'lsbseed'">
+                <div data-subview="LSBSeedForm"></div>
+            </div>
+            {{!-- Koha-Jao --}}
+            <div rv-show="model:algorithm | eq 'koha-jao'">
+                <div data-subview="KohaJaoForm"></div>
+            </div>
+        </div>
+
+    </div>
+    {{!-- Block button --}}
+    <button type="submit" class="js-proceed btn btn-primary btn-block">Proceed</button>
+</form>

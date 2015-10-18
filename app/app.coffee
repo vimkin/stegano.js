@@ -1,39 +1,18 @@
-define (require, exports, module) ->
+define (require) ->
+  'use strict'
 
-	# Load menu container
-	MenuContainerView = require 'shared/base_menu_container_view'
+  Router = require('router') # Initialize Router
+  Backbone = require('backbone')
 
-	# Packages loading
-	demoPackage = require 'packages/demo'
-	orgPackage = require 'packages/organization'
-	
-	#Utils and other
-	Utils = require 'shared/utils'
+  # Vendor libs
+  require('bootstrap')
+  require('shared/rivets')
 
-	if module.config().fakeServer
-		server = require 'server'
-		server.start()
+  class App
+    root: '/'
 
-	exports.App = Backbone.Router.extend {
-		routes:
-			'*other': 'unknownRoute'
-
-		initialize: ->
-			if @authenticate()
-				@initMenu()
-			Utils.bindRoutes @, [
-				demoPackage.Controller
-				orgPackage.Controller
-			]
-
-		unknownRoute: ->
-			console.log 'unknown'
-
-		authenticate: ->
-			yes
-
-		initMenu: ->
-			@menuContainerView = new MenuContainerView
-				el: '#menu'
-	}
-	return
+    constructor: ->
+      Backbone.history.start(
+        pushState: true
+        root: @root
+      )

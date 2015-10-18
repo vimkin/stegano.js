@@ -1,0 +1,10 @@
+{{!-- Choose RGB channel --}}
+<div class="form-group">
+    <label for="algorithmChannel">Choose algorithm RGB channel:</label>
+    <select id="algorithmChannel" class="form-control" rv-value="model:channel">
+        <option disabled selected> -- select an option -- </option>
+        {{#each channels}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+</div>
