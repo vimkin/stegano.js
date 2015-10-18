@@ -16,3 +16,6 @@ bower_components
 
 # Build
 .compiled
+
+# Project
+app/assets/css
